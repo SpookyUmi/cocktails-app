@@ -16,32 +16,46 @@ En plus d'assurer un code propre, cohérent et sans erreurs basiques, ces outils
 
 On peut également utiliser un fichier de configuration `.editorconfig`, utile en cas de collaboration sur une même codebase, pour éviter que sa propre config ESlint/Prettier personnelle n'entre en collision avec celle du projet.
 
-## Project Setup
+## Instructions
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compiler et Hot-Reload pour le développement
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Compiler et Minify pour la production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Lancer les tests unitaires avec [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Lint avec [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
+```
+
+## Docker
+
+### Construire l'image Docker
+
+```sh
+docker build -t cocktails-app .
+```
+
+### Exécuter un conteneur
+
+```sh
+docker run -d -p 8080:80 cocktails-app
 ```

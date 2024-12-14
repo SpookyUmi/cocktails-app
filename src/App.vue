@@ -1,47 +1,38 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, onMounted } from 'vue'
+import { fetchCocktails } from './cocktailService'
+import CocktailCard from './components/CocktailCard.vue'
+
+const cocktails = ref(null)
+const error = ref(null)
+const loading = ref(true)
+
+// On souhaite afficher 3 cocktails aléatoires qui changent à chaque accès à la page
+// J'appelle ma fonction asynchrone `fetchCocktails` directement dans `onMounted`
+onMounted(async () => {
+  try {
+    cocktails.value = await fetchCocktails()
+  } catch (err) {
+    error.value = 'Le bar est à sec...'
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <p v-if="loading" class="font-limelight text-center mt-10">Cocktails en préparation...</p>
+  <div
+    v-else
+    class="animate-fadeIn max-w-screen-xl p-10 mx-auto my-4 overflow-scroll flex flex-col gap-3 lg:grid lg:grid-rows-app lg:grid-cols-2 lg:gap-5"
+  >
+    <CocktailCard
+      v-for="(cocktail, index) in cocktails"
+      :key="cocktail.idDrink"
+      :cocktail="cocktail"
+      :first-elem="index === 0"
+    />
+  </div>
+  <p v-if="error">{{ error }}</p>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>

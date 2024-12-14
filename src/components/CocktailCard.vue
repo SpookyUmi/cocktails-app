@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import HeaderSection from './HeaderSection.vue'
 
+// Je définis mes props
 const props = defineProps({
   cocktail: {
     type: Object,
@@ -12,6 +12,11 @@ const props = defineProps({
     required: true,
   },
 })
+
+// J'ai choisi de me servir des ingrédients de l'object `cocktail`.
+// Chaque objet contient 15 key `strIngredientsN`, dont la valeur est soit une string, soit `null`.
+// Je vérifie toutes les valeurs, de manière dynamique en incrémentant la partie variable de la key `strIngredient``
+// Je ne conserve que les valeurs existantes.
 const cocktailIngredients = computed(() =>
   Array.from({ length: 15 }, (_, i) => props.cocktail[`strIngredient${i + 1}`]).filter(Boolean),
 )
@@ -20,13 +25,15 @@ const cocktailIngredients = computed(() =>
 <template>
   <section :class="sectionClass">
     <article :class="articleClass">
-      <HeaderSection
-        :cocktail="cocktail"
-        :cocktail-ingredients="cocktailIngredients"
-        :text-align="firstElem ? 'right' : 'left pt-8 px-4 lg:p-4'"
-        :title-size="firstElem ? 'lg:text-5xl xl:text-6xl' : 'xl:text-4xl'"
-        :ingredients-size="firstElem ? '' : 'text-sm'"
-      />
+      <div :class="divStructureClass">
+        <h3 :class="titleClass">
+          {{ cocktail.strDrink }}
+        </h3>
+        <p v-if="cocktailIngredients && cocktailIngredients.length" :class="ingredientsClass">
+          {{ cocktailIngredients.join(' · ') }}
+        </p>
+        <p v-else>Les ingrédients sont en cours de chargement...</p>
+      </div>
       <p v-if="firstElem" class="italic lg:mt-4 drop-shadow-md line--truncate">
         "{{ cocktail.strInstructions }}"
       </p>
@@ -56,6 +63,10 @@ const cocktailIngredients = computed(() =>
 
 <script>
 export default {
+  // Pour éviter des répétitions de style et d'éléments, j'ai choisi cette syntaxe qui me
+  // renvoie des tableaux de classes CSS de manière conditionnelle en fonction de `firstElem`.
+  // Je me sers de `computed` pour traquer les updates de `firstElem`.
+  // On aurait aussi pu se servir d'un `v-if` & `v-else`, bien que moins lisible dans ce cas.
   computed: {
     sectionClass() {
       return [
@@ -78,6 +89,18 @@ export default {
         'w-full object-cover',
         this.firstElem ? 'lg:w-[400px] max-h-[400px]' : 'lg:w-[200px] lg:justify-self-end lg:mb-4',
       ]
+    },
+    divStructureClass() {
+      return this.firstElem ? 'lg:text-right' : 'text-left pt-8 px-4 lg:p-4'
+    },
+    titleClass() {
+      return [
+        'font-limelight uppercase text-3xl drop-shadow-md',
+        this.firstElem ? 'lg:text-5xl xl:text-6xl' : 'xl:text-4xl',
+      ]
+    },
+    ingredientsClass() {
+      return ['uppercase font-medium drop-shadow-md', !this.firstElem && 'text-sm']
     },
   },
 }

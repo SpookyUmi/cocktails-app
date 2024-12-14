@@ -13,20 +13,26 @@ onMounted(async () => {
   try {
     cocktails.value = await fetchCocktails()
   } catch (err) {
+    // J'intercepte une éventuelle erreur.
     error.value = 'Le bar est à sec...'
     console.error(err)
   } finally {
+    // Si tout est ok, je passe mon statut `loading` à false.
     loading.value = false
   }
 })
 </script>
 
 <template>
+  <!-- J'affiche un message personnalisé tant que ma requête n'est pas résolue -->
   <p v-if="loading" class="font-limelight text-center mt-10">Cocktails en préparation...</p>
   <div
     v-else
     class="animate-fadeIn max-w-screen-xl p-10 mx-auto my-4 overflow-scroll flex flex-col gap-3 lg:grid lg:grid-rows-app lg:grid-cols-2 lg:gap-5"
   >
+    <!-- Une fois la requête terminée, je loop sur mon tableau de 3 cocktails
+  et j'envoie la data à mon composant `CocktailCard`. -->
+    <!-- La prop `first-elem` va essentiellement me servir pour du conditional rendering et des styles. -->
     <CocktailCard
       v-for="(cocktail, index) in cocktails"
       :key="cocktail.idDrink"

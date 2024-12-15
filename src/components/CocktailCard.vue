@@ -32,9 +32,9 @@ const cocktailIngredients = computed(() =>
         <p v-if="cocktailIngredients && cocktailIngredients.length" :class="ingredientsClass">
           {{ cocktailIngredients.join(' · ') }}
         </p>
-        <p v-else>Les ingrédients sont en cours de chargement...</p>
+        <p v-else>Ingredients are loading...</p>
       </div>
-      <p v-if="firstElem" class="italic lg:mt-4 drop-shadow-md line--truncate">
+      <p v-if="firstElem" class="italic lg:mt-4 drop-shadow-md overflow-scroll flex-1">
         "{{ cocktail.strInstructions }}"
       </p>
       <img
@@ -54,7 +54,7 @@ const cocktailIngredients = computed(() =>
 
     <p
       v-if="!firstElem"
-      class="italic px-4 mb-8 drop-shadow-md line--truncate lg:p-4 lg:pb-0 lg:w-full"
+      class="italic px-4 mb-8 drop-shadow-md overflow-scroll lg:p-4 lg:pb-0 lg:w-full"
     >
       "{{ cocktail.strInstructions }}"
     </p>
@@ -73,14 +73,14 @@ export default {
         'rounded-sm backdrop-blur-lg bg-transparent-peach shadow-xl overflow-hidden flex',
         this.firstElem
           ? 'flex-col-reverse lg:flex-row lg:justify-end lg:col-span-2 lg:w-[100%] lg:max-h-[400px]'
-          : 'flex-col lg:w-full lg:h-full',
+          : 'flex-col lg:w-full lg:max-h-[400px]',
       ]
     },
     articleClass() {
       return [
         'w-full',
         this.firstElem
-          ? 'lg:text-right py-8 px-4'
+          ? 'flex flex-col lg:text-right py-8 px-4'
           : 'text-left flex flex-col-reverse lg:text-left lg:grid lg:grid-cols-article',
       ]
     },

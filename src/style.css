@@ -37,21 +37,8 @@ body {
   margin: 0 auto;
 }
 
-.line--truncate {
-  display: -webkit-box;
-  line-clamp: 8;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 @media (min-width: 976px) {
   body {
     background: url(@/assets/peaks-lg.svg) no-repeat center center fixed;
-  }
-
-  #app {
-    /* height: 100vh; */
   }
 }
